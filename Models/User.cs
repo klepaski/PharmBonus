@@ -19,6 +19,7 @@ namespace Med.Models
 
         public int IsVerified { get; set; }
         public int IsBlocked { get; set; }
+        public int IsEmailConfirmed { get; set; }
         public DateTime RegistrationDate { get; set; }
         public DateTime LastLoginDate { get; set; }
         public int Count { get; set; }

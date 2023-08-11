@@ -1,0 +1,11 @@
+{
+  "firstName": "Luda",
+  "lastName": "Voron",
+  "userName": "vorona",
+  "email": "po97a@mail.ru",
+  "region": "Brest",
+  "city": "Brest",
+  "category": "Cardio",
+  "password": "1",
+  "role": "doctor"
+}

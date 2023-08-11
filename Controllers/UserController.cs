@@ -19,11 +19,32 @@ namespace Med.Controllers
     {
         private readonly ILogger<UserController> _logger;
         private readonly ApplicationDbContext _db;
+        private readonly IEmailService _emailService;
 
-        public UserController(ILogger<UserController> logger, ApplicationDbContext db)
+        public UserController(ILogger<UserController> logger, ApplicationDbContext db, IEmailService emailService)
         {
             _logger = logger;
             _db = db;
+            _emailService = emailService;
+        }
+
+        [HttpPost("/api/test")]
+        public IActionResult Test(Object obj)
+        {
+            return Ok(obj);
+        }
+
+        [HttpGet("/api/Email")]
+        public IActionResult Email(int userId)
+        {
+            User? user = _db.Users.Find(userId);
+            if (user == null)
+            {
+                return NotFound($"User with id {userId} doesn't exist.");
+            }
+            user.IsEmailConfirmed = 1;
+            _db.SaveChanges();
+            return Ok("Email confirmed.");
         }
 
         [HttpPost("/token")]
@@ -93,19 +114,8 @@ namespace Med.Controllers
             return Ok(user);
         }
 
-        /*
-         {
-          "firstName": "Julia",
-          "lastName": "Chistyakova",
-          "userName": "loopy",
-          "email": "user@example.com",
-          "region": "Brest region",
-          "city": "Brest",
-          "category": "Lor",
-          "password": "1",
-          "role": "doctor"
-        }
-        */
+        //ПОДТВЕРЖДЕНИЕ ПОЧТЫ!!
+
         [HttpPost]
         public async Task<IActionResult> Post(User user)
         {
@@ -135,11 +145,13 @@ namespace Med.Controllers
                 LastLoginDate = DateTime.UtcNow,
                 Count = 0
             };
-            await _db.AddAsync(user);
+            await _db.AddAsync(newUser);
             await _db.SaveChangesAsync();
+            _emailService.SendConfirmationEmail(newUser.Id, newUser.FirstName, newUser.LastName, newUser.Email);
             return Ok("User created.");
         }
 
+        /*МЕНЯЕТ САМ СЕБЯ В ЛИЧНОМ КАБИНЕТЕ*/
         [HttpPut]
         public async Task<IActionResult> Put(User newUser)
         {
@@ -154,18 +166,20 @@ namespace Med.Controllers
             }
             user.FirstName = newUser.FirstName;
             user.LastName = newUser.LastName;
+            if (_db.Users.FirstOrDefault(x => x.UserName == newUser.UserName) != null)
+            {
+                return BadRequest("User with this username already exists.");
+            }
+            if (_db.Users.FirstOrDefault(x => x.Email == newUser.Email) != null)
+            {
+                return BadRequest("User with this email already exists.");
+            }
             user.UserName = newUser.UserName;
             user.Email = newUser.Email;
             user.Region = newUser.Region;
             user.City = newUser.City;
             user.Category = newUser.Category;
             user.Password = newUser.Password;
-            user.Role = newUser.Role;
-            user.IsVerified = newUser.IsVerified;
-            user.IsBlocked = newUser.IsBlocked;
-            user.RegistrationDate = newUser.RegistrationDate;
-            user.LastLoginDate = newUser.LastLoginDate;
-            user.Count = newUser.Count;
             await _db.SaveChangesAsync();
             return Ok("User updated.");
         }
