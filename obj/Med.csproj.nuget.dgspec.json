@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\MED\\Med\\Med.csproj": {}
+    "D:\\4\\MED\\Med\\Med.csproj": {}
   },
   "projects": {
-    "D:\\MED\\Med\\Med.csproj": {
+    "D:\\4\\MED\\Med\\Med.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\MED\\Med\\Med.csproj",
+        "projectUniqueName": "D:\\4\\MED\\Med\\Med.csproj",
         "projectName": "Med",
-        "projectPath": "D:\\MED\\Med\\Med.csproj",
+        "projectPath": "D:\\4\\MED\\Med\\Med.csproj",
         "packagesPath": "C:\\Users\\USER\\.nuget\\packages\\",
-        "outputPath": "D:\\MED\\Med\\obj\\",
+        "outputPath": "D:\\4\\MED\\Med\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -51,9 +51,23 @@
               "target": "Package",
               "version": "[7.0.4, )"
             },
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[7.0.10, )"
+            },
+            "Microsoft.EntityFrameworkCore.Design": {
+              "target": "Package",
+              "version": "[7.0.10, )"
+            },
             "Microsoft.EntityFrameworkCore.SqlServer": {
               "target": "Package",
               "version": "[7.0.9, )"
+            },
+            "Microsoft.EntityFrameworkCore.Tools": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[7.0.10, )"
             },
             "Microsoft.VisualStudio.Azure.Containers.Tools.Targets": {
               "target": "Package",
@@ -87,7 +101,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.202\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.400\\RuntimeIdentifierGraph.json"
         }
       }
     }

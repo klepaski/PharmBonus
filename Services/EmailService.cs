@@ -34,7 +34,7 @@ namespace Med.Services
             m.IsBodyHtml = true;
             m.Body = $"<h3>Привет, {firstname} {lastname}!</h3>" +
                     $"<p>Для подтверждения почты, пожалуйста, перейдите " +
-                    $"по <a target=\"_self\" href=\"https://localhost:7006/api/Email?userId={userId}\">ссылке</a></p>" +
+                    $"по <a target=\"_self\" href=\"https://med.up.railway.app/api/Email?userId={userId}\">ссылке</a></p>" +
                     $"<br/><h4>Если вы не регистрировались в нашем приложении, обратитесь по телефону +375(33) 318-62-23.</h4>";
             SmtpClient smtp = new SmtpClient("smtp.mail.ru", PORT);
             smtp.Credentials = new NetworkCredential(SENDER_EMAIL, PASSWORD);

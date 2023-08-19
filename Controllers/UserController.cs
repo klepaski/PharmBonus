@@ -48,15 +48,14 @@ namespace Med.Controllers
         }
 
         [HttpPost("/token")]
-        public IActionResult Token(string username, string password)
+        public IActionResult Token(string email, string password)
         {
-            var identity = GetIdentity(username, password);
+            var identity = GetIdentity(email, password);
             if (identity == null)
             {
-                return BadRequest("Invalid username or password.");
+                return BadRequest("Invalid email or password.");
             }
             var now = DateTime.UtcNow;
-            //создаем jwt-токен
             var jwt = new JwtSecurityToken(
                     issuer: AuthOptions.ISSUER,
                     audience: AuthOptions.AUDIENCE,
@@ -69,27 +68,24 @@ namespace Med.Controllers
             var response = new
             {
                 access_token = encodedJwt,
-                username = identity.Name
+                email = identity.Name
             };
             return Ok(JsonSerializer.Serialize(response));
         }
 
-        private ClaimsIdentity GetIdentity(string username, string password)
+        private ClaimsIdentity GetIdentity(string email, string password)
         {
-            User user = _db.Users.FirstOrDefault(x => x.UserName == username && x.Password == password);
-            if (user != null)
-            {
-                var claims = new List<Claim>
+            User user = _db.Users.FirstOrDefault(x => x.Email == email && x.Password == password);
+            if (user == null) return null;
+            var claims = new List<Claim>
                 {
-                    new Claim(ClaimsIdentity.DefaultNameClaimType, user.UserName),
+                    new Claim(ClaimsIdentity.DefaultNameClaimType, user.Email),
                     new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role)
                 };
-                ClaimsIdentity claimsIdentity =
-                new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType,
-                    ClaimsIdentity.DefaultRoleClaimType);
-                return claimsIdentity;
-            }
-            return null;
+            ClaimsIdentity claimsIdentity =
+            new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType,
+                ClaimsIdentity.DefaultRoleClaimType);
+            return claimsIdentity;
         }
 
         [HttpGet]
@@ -119,10 +115,6 @@ namespace Med.Controllers
         [HttpPost]
         public async Task<IActionResult> Post(User user)
         {
-            if (_db.Users.FirstOrDefault(x => x.UserName == user.UserName) != null)
-            {
-                return BadRequest("User with this username already exists.");
-            }
             if (_db.Users.FirstOrDefault(x => x.Email == user.Email) != null)
             {
                 return BadRequest("User with this email already exists.");
@@ -131,7 +123,6 @@ namespace Med.Controllers
             {
                 FirstName = user.FirstName,
                 LastName = user.LastName,
-                UserName = user.UserName,
                 Email = user.Email,
                 Region = user.Region,
                 City = user.City,
@@ -151,7 +142,7 @@ namespace Med.Controllers
             return Ok("User created.");
         }
 
-        /*МЕНЯЕТ САМ СЕБЯ В ЛИЧНОМ КАБИНЕТЕ*/
+
         [HttpPut]
         public async Task<IActionResult> Put(User newUser)
         {
@@ -166,20 +157,11 @@ namespace Med.Controllers
             }
             user.FirstName = newUser.FirstName;
             user.LastName = newUser.LastName;
-            if (_db.Users.FirstOrDefault(x => x.UserName == newUser.UserName) != null)
-            {
-                return BadRequest("User with this username already exists.");
-            }
-            if (_db.Users.FirstOrDefault(x => x.Email == newUser.Email) != null)
-            {
-                return BadRequest("User with this email already exists.");
-            }
-            user.UserName = newUser.UserName;
-            user.Email = newUser.Email;
             user.Region = newUser.Region;
             user.City = newUser.City;
             user.Category = newUser.Category;
             user.Password = newUser.Password;
+            user.Count = newUser.Count;
             await _db.SaveChangesAsync();
             return Ok("User updated.");
         }
