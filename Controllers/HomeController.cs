@@ -6,7 +6,7 @@ using Med.DAL;
 using Microsoft.AspNetCore.Authorization;
 using System.Data;
 using Azure;
-using System.Text.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Med.Controllers
 {
@@ -29,12 +29,12 @@ namespace Med.Controllers
         {
             var currentUser = _db.Users.FirstOrDefault(x => x.Email.Equals(User.Identity.Name));
             if (currentUser == null) return BadRequest("Wrong authorization");
-            var response = new {
-                first_name = currentUser.FirstName,
-                last_name = currentUser.LastName,
-                user_counter = currentUser.Count
-            };
-            return Ok(JsonSerializer.Serialize(response));
+
+            JObject response = new JObject();
+            response.Add("first_name", currentUser.FirstName);
+            response.Add("last_name", currentUser.LastName);
+            response.Add("user_counter", currentUser.Count);
+            return Ok(response);
         }
     }
 }

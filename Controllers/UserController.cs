@@ -8,8 +8,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Text.Json;
 using System;
+using Newtonsoft.Json.Linq;
 
 namespace Med.Controllers
 {
@@ -48,8 +48,11 @@ namespace Med.Controllers
         }
 
         [HttpPost("/token")]
-        public IActionResult Token(string email, string password)
+        public IActionResult Token([FromBody] JObject data)
         {
+            string email = data["email"].ToString();
+            string password = data["password"].ToString();
+
             var identity = GetIdentity(email, password);
             if (identity == null)
             {
@@ -65,12 +68,10 @@ namespace Med.Controllers
                     signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
             var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
 
-            var response = new
-            {
-                access_token = encodedJwt,
-                email = identity.Name
-            };
-            return Ok(JsonSerializer.Serialize(response));
+            JObject response = new JObject();
+            response.Add("access_token", encodedJwt);
+            response.Add("email", identity.Name);
+            return Ok(response);
         }
 
         private ClaimsIdentity GetIdentity(string email, string password)
