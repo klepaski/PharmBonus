@@ -28,11 +28,11 @@ namespace Med.Controllers
             _emailService = emailService;
         }
 
-        [HttpPost("/api/test")]
-        public IActionResult Test(Object obj)
-        {
-            return Ok(obj);
-        }
+        //[HttpPost("/api/test")]
+        //public IActionResult Test(Object obj)
+        //{
+        //    return Ok(obj);
+        //}
 
         [HttpGet("/api/Email")]
         public IActionResult Email(int userId)
