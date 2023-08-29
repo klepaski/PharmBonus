@@ -25,56 +25,6 @@ namespace Med.Controllers
             _db = db;
         }
 
-        //{
-        //  "title": "Naphazalin",
-        //  "summary": "Nose spray",
-        //  "description": "Spray for running nose",
-        //  "videoUrl": "https://youtu.be/M8QKjDzb-Os",
-        //  "imageUrl": "https://www.dropbox.com/scl/fi/i0vh1stcwlhcrw5nspsqo/form_196.jpg?rlkey=oq9tjifcx1kpfl4iqhkgm6fsp&dl=0"
-        //}
-
-    //[HttpGet("/api/SampleData")]
-    //public async Task<IActionResult> Sample()
-    //{
-    //    Test test = new Test()
-    //    {
-    //        DrugId = 1,
-    //        Points = 10
-    //    };
-    //    await _db.AddAsync(test);
-    //    await _db.SaveChangesAsync();
-    //    Question q1 = new Question()
-    //    {
-    //        TestId = 1,
-    //        QuestionText = "What is the name of drug?",
-    //        Option1 = "Remantadin",
-    //        Option2 = "Loopy",
-    //        Option3 = "Naphazalin",
-    //        Answer = "Naphazalin"
-    //    };
-    //    Question q2 = new Question()
-    //    {
-    //        TestId = 1,
-    //        QuestionText = "Is it dangerous?",
-    //        Option1 = "No, at all",
-    //        Option2 = "Very!",
-    //        Option3 = "Safe if use according to instructions",
-    //        Answer = "Safe if use according to instructions"
-    //    };
-    //    Question q3 = new Question()
-    //    {
-    //        TestId = 1,
-    //        QuestionText = "Do you like it?",
-    //        Option1 = "Maybe... I don't know",
-    //        Option2 = "Hell NO!",
-    //        Option3 = "Ohh yes!",
-    //        Answer = "Ohh yes!"
-    //    };
-    //    await _db.AddRangeAsync(q1, q2, q3);
-    //    await _db.SaveChangesAsync();
-    //    return Ok("Test created");
-    //}
-
     //[HttpGet("/api/GetTests")]
     //public IActionResult GetTests()
     //{
@@ -127,6 +77,37 @@ namespace Med.Controllers
             response.Add("drug_description", drug.Description);
             response.Add("video_url", drug.VideoUrl);
             response.Add("image_url", drug.ImageUrl);
+            return Ok(response);
+        }
+
+        [HttpPost("/api/GetTest")]
+        public async Task<IActionResult> GetTest([FromBody] JObject data)
+        {
+            var currentUser = _db.Users.FirstOrDefault(x => x.Email.Equals(User.Identity.Name));
+            if (currentUser == null) return BadRequest("Wrong authorization");
+
+            int test_id = Int32.Parse(data["test_id"].ToString());
+            Test? test = await _db.Tests.FindAsync(test_id);
+            if (test == null) return NotFound($"Test with id {test_id} doesn't exist.");
+
+            List<Question> questions = await _db.Questions.Where(q => q.TestId.Equals(test_id)).ToListAsync();
+            JArray jarrayObj = new JArray();
+
+            foreach (var q in questions)
+            {
+                JObject item = new JObject();
+                item.Add("question_text", q.QuestionText);
+                item.Add("option1", q.Option1);
+                item.Add("option2", q.Option2);
+                item.Add("option3", q.Option3);
+                item.Add("answer", q.Answer);
+                jarrayObj.Add(item);
+            }
+
+            JObject response = new JObject();
+            response.Add("test_id", test_id);
+            response.Add("points", test.Points);
+            response.Add("questions", jarrayObj);
             return Ok(response);
         }
     }

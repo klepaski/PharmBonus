@@ -8,7 +8,7 @@ namespace Med.Services
         public const string ISSUER = "ChistyakovaJulia";
         public const string AUDIENCE = "AllClients";
         const string KEY = "everyone_likes_small_mimes123!@";
-        public const int LIFETIME = 30;
+        public const int LIFETIME = 1200;
         public static SymmetricSecurityKey GetSymmetricSecurityKey()
         {
             return new SymmetricSecurityKey(Encoding.ASCII.GetBytes(KEY));

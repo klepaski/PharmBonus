@@ -51,6 +51,35 @@ namespace Med.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Drugs");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Description = "Spray for running nose.",
+                            ImageUrl = "https://www.dropbox.com/scl/fi/i0vh1stcwlhcrw5nspsqo/form_196.jpg?rlkey=oq9tjifcx1kpfl4iqhkgm6fsp&dl=0",
+                            Summary = "Nose spray",
+                            Title = "Naphazalin",
+                            VideoUrl = "https://youtu.be/M8QKjDzb-Os"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Description = "Tablets to drink when you catch cold.",
+                            ImageUrl = "https://www.dropbox.com/scl/fi/i0vh1stcwlhcrw5nspsqo/form_196.jpg?rlkey=oq9tjifcx1kpfl4iqhkgm6fsp&dl=0",
+                            Summary = "White tablets",
+                            Title = "Remantadin",
+                            VideoUrl = "https://youtu.be/M8QKjDzb-Os"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Description = "The best tablets when you have allergy",
+                            ImageUrl = "https://www.dropbox.com/scl/fi/i0vh1stcwlhcrw5nspsqo/form_196.jpg?rlkey=oq9tjifcx1kpfl4iqhkgm6fsp&dl=0",
+                            Summary = "Allergy tablets",
+                            Title = "Parlazin-Neo",
+                            VideoUrl = "https://youtu.be/M8QKjDzb-Os"
+                        });
                 });
 
             modelBuilder.Entity("Med.Models.PassedTest", b =>
@@ -118,6 +147,38 @@ namespace Med.Migrations
                     b.HasIndex("TestId");
 
                     b.ToTable("Questions");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Answer = "It's safe if use according to instructions",
+                            Option1 = "Yes, be careful!",
+                            Option2 = "Haha, no, at all.",
+                            Option3 = "It's safe if use according to instructions",
+                            QuestionText = "Is nose spray dangerous?",
+                            TestId = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Answer = "Yes, it's literally the best!",
+                            Option1 = "Yes, but no very much...",
+                            Option2 = "No, it's terrible!",
+                            Option3 = "Yes, it's literally the best!",
+                            QuestionText = "Do you like naphazalin?",
+                            TestId = 1
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Answer = "Up to 5 days",
+                            Option1 = "Endlessly",
+                            Option2 = "Never",
+                            Option3 = "Up to 5 days",
+                            QuestionText = "How long can you take it?",
+                            TestId = 1
+                        });
                 });
 
             modelBuilder.Entity("Med.Models.Test", b =>
@@ -139,6 +200,14 @@ namespace Med.Migrations
                     b.HasIndex("DrugId");
 
                     b.ToTable("Tests");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            DrugId = 1,
+                            Points = 10
+                        });
                 });
 
             modelBuilder.Entity("Med.Models.User", b =>
@@ -202,6 +271,44 @@ namespace Med.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Category = "Cardiologist",
+                            City = "Brest",
+                            Count = 10,
+                            Email = "julia.klepaski@gmail.com",
+                            FirstName = "Julia",
+                            IsBlocked = 0,
+                            IsEmailConfirmed = 1,
+                            IsVerified = 0,
+                            LastLoginDate = new DateTime(2023, 8, 29, 13, 57, 13, 119, DateTimeKind.Local).AddTicks(6408),
+                            LastName = "Chistyakova",
+                            Password = "1",
+                            Region = "Brest region",
+                            RegistrationDate = new DateTime(2023, 8, 29, 13, 57, 13, 119, DateTimeKind.Local).AddTicks(6381),
+                            Role = "doctor"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Category = "Hospital",
+                            City = "Brest",
+                            Count = 134,
+                            Email = "maxon@gmail.com",
+                            FirstName = "Maxim",
+                            IsBlocked = 0,
+                            IsEmailConfirmed = 0,
+                            IsVerified = 1,
+                            LastLoginDate = new DateTime(2023, 8, 29, 13, 57, 13, 119, DateTimeKind.Local).AddTicks(6420),
+                            LastName = "Dulevich",
+                            Password = "1",
+                            Region = "Brest region",
+                            RegistrationDate = new DateTime(2023, 8, 29, 13, 57, 13, 119, DateTimeKind.Local).AddTicks(6418),
+                            Role = "doctor"
+                        });
                 });
 
             modelBuilder.Entity("Med.Models.PassedTest", b =>

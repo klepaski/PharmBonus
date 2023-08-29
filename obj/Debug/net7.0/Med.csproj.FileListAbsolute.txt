@@ -163,3 +163,5 @@ D:\4\MED\Med\bin\Debug\net7.0\Newtonsoft.Json.dll
 D:\4\MED\Med\bin\Debug\net7.0\Microsoft.AspNetCore.JsonPatch.dll
 D:\4\MED\Med\bin\Debug\net7.0\Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
 D:\4\MED\Med\bin\Debug\net7.0\Newtonsoft.Json.Bson.dll
+D:\4\MED\Med\bin\Debug\net7.0\EntityFramework.SqlServer.dll
+D:\4\MED\Med\bin\Debug\net7.0\EntityFramework.dll
